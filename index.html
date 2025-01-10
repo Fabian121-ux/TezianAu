@@ -1,0 +1,749 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TezienAu - Artificial Understanding</title>
+<style>
+:root {
+  --primary: #6e44ff;
+  --text: #ffffff;
+  --bg: #0a0a0a;
+  --chat-bg: #151515;
+  --nav-bg: rgba(10, 10, 10, 0.95);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--nav-bg);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  background: linear-gradient(45deg, var(--primary), #ff44e3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover {
+  opacity: 1;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 2rem;
+  margin-top: 60px;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, var(--primary), #ff44e3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  text-align: center;
+  max-width: 600px;
+  opacity: 0.8;
+}
+
+section {
+  min-height: 100vh;
+  padding: 6rem 2rem 2rem;
+}
+
+section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(45deg, var(--primary), #ff44e3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ball-container {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.ball {
+  width: 60px;
+  height: 60px;
+  background: var(--primary);
+  border-radius: 50%;
+  cursor: pointer;
+  animation: bounce 2s infinite ease-in-out;
+  box-shadow: 0 0 20px rgba(110, 68, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.ball:hover {
+  box-shadow: 0 0 30px rgba(248, 246, 255, 0.6);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.chatbot {
+  position: fixed;
+  bottom: -100vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 400px;
+  height: 500px;
+  background: var(--chat-bg);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.3);
+  transition: bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.chatbot.active {
+  bottom: 2rem;
+}
+
+.chat-header {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1.5rem;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.close-btn:hover {
+  opacity: 1;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.message {
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+  max-width: 80%;
+}
+
+.bot-message {
+  background: rgba(110, 68, 255, 0.1);
+  margin-right: auto;
+}
+
+.user-message {
+  background: var(--primary);
+  margin-left: auto;
+}
+
+.message a {
+  color: #ff44e3;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.message a:hover {
+  text-decoration: underline;
+}
+
+.bot-message a {
+  color: #6e44ff;
+}
+
+.chat-input {
+  padding: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
+  color: var(--text);
+}
+
+.chat-input button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--text);
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.chat-input button:hover {
+  opacity: 0.9;
+}
+
+.mobile-menu {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.background-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.2;
+}
+
+.particle {
+  position: absolute;
+  background: linear-gradient(45deg, var(--primary), #ff44e3);
+  border-radius: 50%;
+  filter: blur(2px);
+  animation: float-around 20s linear infinite;
+}
+
+@keyframes float-around {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(100px, 100px) rotate(90deg);
+  }
+  50% {
+    transform: translate(0, 200px) rotate(180deg);
+  }
+  75% {
+    transform: translate(-100px, 100px) rotate(270deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+.card {
+  background: rgba(21, 21, 21, 0.7);
+  border-radius: 15px;
+  padding: 2rem;
+  margin: 1rem 0;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(110, 68, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(110, 68, 255, 0.2);
+}
+
+.card-icon {
+  font-size: 2.8rem;
+  margin-bottom: 1.2rem;
+  background: linear-gradient(45deg, var(--primary), #ff44e3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.card p {
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.solutions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.footer {
+  background: var(--chat-bg);
+  padding: 3rem 2rem;
+  margin-top: 4rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.footer-section h4 {
+  color: var(--text);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.footer-section p, .footer-section a {
+  color: var(--text);
+  opacity: 0.7;
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+.footer-section a:hover {
+  opacity: 1;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid rgba(110, 68, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+
+.form-group textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 10px rgba(110, 68, 255, 0.2);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: #5933ff;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--nav-bg);
+    padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .mobile-menu {
+    display: block;
+  }
+  
+  .solutions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    min-height: 200px;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="background-animation" id="backgroundAnimation"></div>
+  <nav>
+    <div class="logo">TezienAu</div>
+    <div class="nav-links">
+      <a href="solutions.html">Solutions</a>
+      <a href="about.html">About</a>
+      <a href="Contact.html">Contact</a>
+    </div>
+    <button class="mobile-menu">&#x2630;</button>
+  </nav>
+
+  <div class="hero">
+    <h1>TezienAu</h1>
+    <p>Pioneering Artificial Understanding - Where AI transcends traditional boundaries to truly comprehend human context and meaning</p>
+  </div>
+
+  <section id="solutions">
+    <h2>Solutions</h2>
+    <div class="solutions-grid">
+      <div class="card">
+        <div class="card-icon">&#x1f9e0;</div>
+        <h3>Context-Aware Understanding</h3>
+        <p>Our advanced natural language processing technology truly understands contextual nuances and subtle meanings in human communication, going beyond simple pattern matching.</p>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#x1f3af;</div>
+        <h3>Semantic Analysis</h3>
+        <p>TezienAu employs deep semantic comprehension to grasp meaning beyond surface-level language processing, enabling more natural and intuitive interactions.</p>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#x2764;&#xfe0f;</div>
+        <h3>Emotional Intelligence</h3>
+        <p>Our system features sophisticated recognition and response to emotional undertones, creating more empathetic and human-like interactions.</p>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#x1f4da;</div>
+        <h3>Adaptive Learning</h3>
+        <p>TezienAu continuously evolves its understanding through real-time interactions, becoming more refined and accurate with each engagement.</p>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#x1f9f1;</div>
+        <h3>Multi-Modal Understanding</h3>
+        <p>Process and comprehend multiple forms of input including text, speech, and visual data for holistic understanding.</p>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#x1f4c8;</div>
+        <h3>Predictive Analytics</h3>
+        <p>Leverage deep understanding to provide actionable insights and predict future trends based on comprehensive data analysis.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About</h2>
+    <div class="solutions-grid">
+      <div class="card">
+        <div class="card-icon">&#x1f31f;</div>
+        <h3>The Future of AI Understanding</h3>
+        <p>TezienAu represents the next evolution in artificial intelligence - Artificial Understanding. Unlike traditional AI systems that rely on pattern matching and predetermined responses, our technology develops genuine comprehension of human communication.</p>
+      </div>
+      
+      <div class="card">
+        <div class="card-icon">&#x1f4a1;</div>
+        <h3>Our Vision</h3>
+        <p>We envision a future where AI systems don&apos;t just process data, but truly comprehend human intent, emotion, and context. TezienAu is leading this transformation through breakthrough developments in semantic understanding.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">&#x1f680;</div>
+        <h3>Innovation Journey</h3>
+        <p>Our journey began with a simple question: What if AI could truly understand humans? Today, we&apos;re pioneering technologies that bridge the gap between artificial intelligence and authentic understanding.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">&#x1f3ed;</div>
+        <h3>Technology Foundation</h3>
+        <p>Built on cutting-edge neural architectures and semantic processing systems, TezienAu combines multiple AI disciplines to achieve genuine comprehension of human communication.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">&#x1f4cb;</div>
+        <h3>Our Team</h3>
+        <p>Led by experts in AI, linguistics, and cognitive science, our diverse team brings together decades of experience in pushing the boundaries of machine intelligence.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">&#x1f3c6;</div>
+        <h3>Our Achievements</h3>
+        <p>Recognized as pioneers in the field of Artificial Understanding, with breakthrough developments in semantic processing and contextual comprehension.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <div class="solutions-grid">
+      <div class="contact-form card">
+        <h3>Contact Us</h3>
+        <form id="contactForm">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div class="ball-container">
+    <div class="ball"></div>
+  </div>
+
+  <div class="chatbot">
+    <div class="chat-header">
+      <h3>TezienAu Understanding System</h3>
+      <button class="close-btn">&#xd7;</button>
+    </div>
+    <div class="chat-messages">
+      <div class="message bot-message">
+        Hello! I&apos;m TezienAu, your Artificial Understanding assistant. Unlike traditional chatbots, I&apos;m designed to truly comprehend the context and meaning behind your words. How can I help you today?
+      </div>
+    </div>
+    <div class="chat-input">
+      <input type="text" placeholder="Share your thoughts...">
+      <button>Send</button>
+    </div>
+  </div>
+
+<script>function createParticles() {
+  const container = document.getElementById('backgroundAnimation');
+  const particleCount = 20;
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    const size = Math.random() * 20 + 10;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.top = `${Math.random() * 100}%`;
+    const duration = Math.random() * 10 + 10;
+    const delay = Math.random() * -20;
+    particle.style.animationDuration = `${duration}s`;
+    particle.style.animationDelay = `${delay}s`;
+    container.appendChild(particle);
+  }
+}
+const CHAT_RESPONSES = ["I appreciate you sharing that. From my analysis, I can understand the underlying context of your query. Would you like to explore this topic further?", "Your perspective is quite interesting. Based on my understanding, I can suggest several approaches that align with your goals. Shall we discuss them?", "I see the nuances in what you're describing. My semantic processing indicates there are some fascinating possibilities here. Would you like me to elaborate?", "That's a thought-provoking point! My contextual analysis suggests there might be some valuable insights we could explore together.", "I'm genuinely intrigued by your approach. Let me process this through my understanding framework to provide you with the most relevant insights."];
+let messageCount = 0;
+document.addEventListener('DOMContentLoaded', () => {
+  createParticles();
+  const ball = document.querySelector('.ball');
+  const chatbot = document.querySelector('.chatbot');
+  const closeBtn = document.querySelector('.close-btn');
+  const input = document.querySelector('.chat-input input');
+  const sendBtn = document.querySelector('.chat-input button');
+  const messagesContainer = document.querySelector('.chat-messages');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  const navLinks = document.querySelector('.nav-links');
+  let isChatbotOpen = false;
+  let messageCount = 0;
+  const CHAT_RESPONSES = ["That's a great point! Can you tell me more about that?", "I'm glad you brought that up. What do you think about this topic?", "This conversation is really interesting. Do you have any other thoughts on this?", "I'm happy to chat with you about this. What's been your experience with this topic?", "That's a fascinating perspective. Can you explain more about why you think that way?"];
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const formData = new FormData(contactForm);
+      contactForm.innerHTML = '<div class="success-message">Thank you for your message! We\'ll be in touch soon.</div>';
+    });
+  }
+  function toggleChatbot() {
+    isChatbotOpen = !isChatbotOpen;
+    chatbot.classList.toggle('active');
+    ball.style.display = isChatbotOpen ? 'none' : 'block';
+  }
+  mobileMenu.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+  });
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+    });
+  });
+  ball.addEventListener('click', toggleChatbot);
+  closeBtn.addEventListener('click', toggleChatbot);
+  function addMessage(message, isBot = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message');
+    messageDiv.classList.add(isBot ? 'bot-message' : 'user-message');
+    messageDiv.innerHTML = message;
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+  function handleSendMessage() {
+    const message = input.value.trim();
+    if (message) {
+      addMessage(message, false);
+      input.value = '';
+      messageCount++;
+      setTimeout(() => {
+        if (messageCount >= 3) {
+          addMessage("I'm really enjoying our conversation! Would you like to continue in our main chat room? " + "Click here to join: <a href='/chatbox/index.html' target='_blank'>TezienAu Chat Room</a>", true);
+        } else {
+          const response = CHAT_RESPONSES[Math.floor(Math.random() * CHAT_RESPONSES.length)];
+          addMessage(response, true);
+        }
+      }, 1000);
+    }
+  }
+  sendBtn.addEventListener('click', handleSendMessage);
+  input.addEventListener('keypress', e => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
+    }
+  });
+});</script>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h4>About TezienAu</h4>
+      <p>Pioneering the future of Artificial Understanding through innovative technology and human-centered design.</p>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <p><a href="#solutions">Solutions</a></p>
+      <p><a href="#about">About</a></p>
+      <p><a href="#contact">Contact</a></p>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: info@tezienau.com</p>
+      <p>Phone: +1 (555) 123-4567</p>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Follow Us</h4>
+      <p><a href="https://twitter.com/tezienau">Twitter</a></p>
+      <p><a href="https://linkedin.com/company/tezienau">LinkedIn</a></p>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>&#xa9; 2025 TezienAu. All rights reserved.</p>
+  </div>
+</footer>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet">
+</body></html>

@@ -1,0 +1,242 @@
+<html><head><base href="." /><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TezienAu | About Us</title>
+<style>
+:root {
+  --primary: #f7d794;
+  --secondary: #7b78ff;
+  --dark:#2a2b5f;
+  --light: #ecf0f1;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--dark);
+  color: var(--light);
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.floating-shapes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.shape {
+  position: absolute;
+  opacity: 0.1;
+  animation: float 15s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(100px, 50px) rotate(90deg); }
+  50% { transform: translate(50px, 100px) rotate(180deg); }
+  75% { transform: translate(-50px, 50px) rotate(270deg); }
+}
+
+.hero {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  margin: 0;
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glow 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { text-shadow: 0 0 20px rgba(247, 215, 148, 0.2); }
+  50% { text-shadow: 0 0 40px rgba(247, 215, 148, 0.4); }
+}
+
+.timeline {
+  position: relative;
+  padding: 4rem 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--secondary);
+  transform: translateX(-50%);
+}
+
+.timeline-item {
+  margin: 2rem 0;
+  position: relative;
+  width: 50%;
+  padding: 2rem;
+  background: rgba(120, 111, 166, 0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+  transform: translateX(-100%);
+  opacity: 0;
+  animation: slideIn 0.8s forwards;
+}
+
+.timeline-item:nth-child(even) {
+  margin-left: 50%;
+  transform: translateX(100%);
+}
+
+@keyframes slideIn {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.values {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 4rem 0;
+}
+
+.value-card {
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  transition: transform 0.3s;
+}
+
+.value-card:hover {
+  transform: translateY(-10px);
+}
+
+.glowing-button {
+  padding: 1rem 2rem;
+  border: none;
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  color: var(--dark);
+  font-weight: bold;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 2rem;
+}
+
+.glowing-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(247, 215, 148, 0.4);
+}
+</style>
+</head>
+<body>
+
+<div class="floating-shapes">
+  <!-- Generated shapes will be inserted here via JavaScript -->
+</div>
+
+<div class="container">
+  <section class="hero">
+    <h1>TezienAu</h1>
+    <p>Crafting Digital Excellence Since 2024</p>
+  </section>
+
+  <section class="timeline">
+    <div class="timeline-item">
+      <h3>Our Genesis</h3>
+      <p>Born from a vision to revolutionize digital experiences, TezienAu emerged as a beacon of innovation in the tech landscape.</p>
+    </div>
+    <div class="timeline-item">
+      <h3>Evolution</h3>
+      <p>Through continuous learning and adaptation, we've grown into a dynamic force, pushing the boundaries of what's possible.</p>
+    </div>
+    <div class="timeline-item">
+      <h3>Present Day</h3>
+      <p>Today, we stand at the intersection of creativity and technology, crafting solutions that inspire and transform.</p>
+    </div>
+  </section>
+
+  <section class="values">
+    <div class="value-card">
+      <h3>Innovation</h3>
+      <p>We push boundaries and challenge conventions, always seeking new ways to solve problems.</p>
+    </div>
+    <div class="value-card">
+      <h3>Excellence</h3>
+      <p>Quality is not just a goal; it's our standard. We deliver nothing but the best.</p>
+    </div>
+    <div class="value-card">
+      <h3>Integrity</h3>
+      <p>Trust and transparency form the foundation of everything we do.</p>
+    </div>
+  </section>
+
+  <div style="text-align: center;">
+    <button class="glowing-button">Join Our Journey</button>
+  </div>
+</div>
+
+<script>
+// Generate floating shapes
+const shapes = [
+  `<svg width="50" height="50" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="${getRandomColor()}"/></svg>`,
+  `<svg width="50" height="50" viewBox="0 0 50 50"><rect x="10" y="10" width="30" height="30" fill="${getRandomColor()}"/></svg>`,
+  `<svg width="50" height="50" viewBox="0 0 50 50"><polygon points="25,5 45,45 5,45" fill="${getRandomColor()}"/></svg>`
+];
+
+function getRandomColor() {
+  const colors = ['#f7d794', '#786fa6', '#e056fd', '#686de0'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function createShape() {
+  const shape = document.createElement('div');
+  shape.className = 'shape';
+  shape.style.left = `${Math.random() * 100}vw`;
+  shape.style.top = `${Math.random() * 100}vh`;
+  shape.style.animationDelay = `${Math.random() * 5}s`;
+  shape.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+  document.querySelector('.floating-shapes').appendChild(shape);
+}
+
+// Create initial shapes
+for (let i = 0; i < 15; i++) {
+  createShape();
+}
+
+// Add new shapes periodically
+setInterval(createShape, 10000);
+
+// Intersection Observer for timeline items
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateX(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.timeline-item').forEach(item => {
+  observer.observe(item);
+});
+</script>
+</body></html>

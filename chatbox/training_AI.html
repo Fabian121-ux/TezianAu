@@ -1,0 +1,763 @@
+<html>
+  <head>
+    <base href="https://websim.devenv/progressive-ai/" />
+    <title>Progressive Learning AI System</title>
+    <style>
+      /* Solar System Moving Background */
+      body {
+        margin: 0;
+        height: 200vh;
+        background: linear-gradient(to bottom, #020024, #090979, #00d4ff);
+        color: #fff;
+        padding: 20px;
+        transition: background-color 0.5s ease;
+      }
+
+      .container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+h1{
+    display: flex;
+    justify-content: space-around;
+}
+.training-interface {
+    background: #2a2a2a;
+    background-color: transparent;
+    padding: 20px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.dataset {
+    background: #333;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+input[type="text"], textarea {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin: 5px 0;
+    background: #333;
+    border: 1px solid rgb(172, 182, 172);
+    color: #0f0;
+    border-radius: 5px;
+}
+
+button {
+    background: #0f0;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.training-progress {
+    height: 400px;
+    overflow-y: auto;
+    background: #333;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+.memory-display {
+    background: #222;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.level-indicator {
+    background: #444;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.score-display {
+    float: right;
+    color: #ff0;
+}
+
+.remove-btn {
+    background: #f00;
+    float: right;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background: #333;
+    border-radius: 10px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #0f0;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.chat-interface {
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 10px;
+    display: none;
+}
+
+.slider-container {
+    margin: 10px 0;
+}
+
+input[type="range"] {
+    width: 200px;
+    margin: 0 10px;
+}
+      .moving-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+      }
+
+      .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: move-stars 5s linear infinite;
+      }
+
+      @keyframes move-stars {
+        0% {
+          transform: translate(0, 0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-100vw, 100vh) scale(0.5);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="moving-background" id="star-container">
+      <!-- JavaScript dynamically creates stars -->
+    </div>
+
+    <div class="container">
+      <h1>Progressive Learning AU System</h1>
+
+      <div class="training-interface">
+        <h2>Training Data Input</h2>
+        <div class="slider-container">
+          <label for="roundsPerLevel"
+            >Rounds per level: <span id="roundsValue">10</span></label
+          >
+          <input type="range" id="roundsPerLevel" min="1" max="20" value="10" />
+        </div>
+        <div id="datasets"></div>
+        <button onclick="addDataset()">Add New Dataset</button>
+        <button onclick="startTraining()" id="trainButton">
+          Start Training
+        </button>
+
+        <div class="level-indicator" id="levelIndicator">Level: --</div>
+        <div class="score-display" id="scoreDisplay">Score: 100.00</div>
+
+        <div class="memory-display" id="memoryDisplay">
+          <h3>AU Memory Bank:</h3>
+          <div id="memoryContent"></div>
+        </div>
+
+        <div class="training-progress" id="trainingProgress">
+          <h3>Training Progress:</h3>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="chat-interface" id="chatInterface">
+        <h2>Test the Trained AU</h2>
+        <input type="text" id="userInput" placeholder="Enter your message..." />
+        <button onclick="sendMessage()">Send</button>
+        <div id="aiResponse"></div>
+      </div>
+    </div>
+
+    <script>
+      const starContainer = document.getElementById("star-container");
+
+      function createStar() {
+        const star = document.createElement("div");
+        star.classList.add("star");
+
+        // Random position and size
+        const size = Math.random() * 3 + 1; // Size between 1px and 4px
+        const startX = Math.random() * window.innerWidth;
+        const startY = Math.random() * window.innerHeight;
+
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${startX}px`;
+        star.style.top = `${startY}px`;
+
+        // Append star to the container
+        starContainer.appendChild(star);
+
+        // Remove the star after animation ends
+        setTimeout(() => {
+          star.remove();
+        }, 5000);
+      }
+
+      function generateStars() {
+        setInterval(createStar, 100); // Create a star every 100ms
+      }
+
+      // Start generating stars
+      generateStars();
+
+      let datasetCount = 0;
+      let trainingData = [];
+      let trainedPatterns = [];
+      let aiMemory = {
+        letters: new Map(),
+        pairs: new Map(),
+        words: new Map(),
+        patterns: new Map(),
+        sequences: new Map(),
+      };
+      let aiScore = 100;
+      let currentLevel = 1;
+      let trainedDatasets = new Set();
+
+      const LEVELS = {
+        1: "Individual Letters",
+        2: "Letter Pairs",
+        3: "Common Letter Patterns",
+        4: "Short Words",
+        5: "Word Combinations",
+        6: "Sentence Structure",
+        7: "Response Patterns",
+        8: "Context Recognition",
+        9: "Response Generation",
+        10: "Full Integration",
+      };
+
+      function getAllSymbols() {
+        let symbols = "";
+        for (let i = 32; i <= 126; i++) {
+          symbols += String.fromCharCode(i);
+        }
+        for (let i = 160; i <= 255; i++) {
+          symbols += String.fromCharCode(i);
+        }
+        return symbols;
+      }
+
+      function generateWord() {
+        let word = "";
+        const length = Math.floor(Math.random() * 5) + 2;
+        for (let i = 0; i < length; i++) {
+          const allSymbols = getAllSymbols();
+          word += allSymbols[Math.floor(Math.random() * allSymbols.length)];
+        }
+        return word;
+      }
+
+      function addDataset() {
+        datasetCount++;
+        const dataset = document.createElement("div");
+        dataset.className = "dataset";
+        dataset.id = `dataset-${datasetCount}`;
+        dataset.innerHTML = `
+        <button class="remove-btn" onclick="removeDataset(${datasetCount})">X</button>
+        <h3>Dataset ${datasetCount}</h3>
+        <input type="text" id="human-${datasetCount}" placeholder="Human input...">
+        <input type="text" id="robot-${datasetCount}" placeholder="Expected AI response...">
+    `;
+        document.getElementById("datasets").appendChild(dataset);
+      }
+
+      function removeDataset(id) {
+        document.getElementById(`dataset-${id}`).remove();
+      }
+
+      function updateMemoryDisplay() {
+        const display = document.getElementById("memoryContent");
+        display.innerHTML = "";
+
+        const memoryTypes = {
+          1: aiMemory.letters,
+          2: aiMemory.pairs,
+          3: aiMemory.patterns,
+          4: aiMemory.words,
+          5: aiMemory.sequences,
+        };
+
+        const currentMemory = memoryTypes[Math.min(5, currentLevel)];
+        if (currentMemory) {
+          currentMemory.forEach((value, key) => {
+            display.innerHTML += `<div>${key}: ${value.toFixed(2)}</div>`;
+          });
+        }
+      }
+
+      function updateScore(points) {
+        aiScore = Math.max(0, Math.min(100, aiScore - points));
+        document.getElementById(
+          "scoreDisplay"
+        ).textContent = `Score: ${aiScore.toFixed(2)}`;
+      }
+
+      function generateResponse(input) {
+        const allSymbols = getAllSymbols();
+        const alternatives = [];
+
+        let mainResponse = "";
+        let confidence = 0;
+
+        if (trainedPatterns.length > 0) {
+          const inputWords = input.toLowerCase().split(" ");
+
+          let bestMatch = {
+            pattern: null,
+            similarity: 0,
+          };
+
+          trainedPatterns.forEach((pattern) => {
+            let matches = 0;
+            inputWords.forEach((word) => {
+              if (
+                pattern.input.some((w) => w.includes(word) || word.includes(w))
+              ) {
+                matches++;
+              }
+            });
+            const similarity =
+              matches / Math.max(inputWords.length, pattern.input.length);
+
+            if (similarity > bestMatch.similarity) {
+              bestMatch = {
+                pattern: pattern,
+                similarity: similarity,
+              };
+            }
+          });
+
+          if (bestMatch.similarity > 0) {
+            const pattern = bestMatch.pattern;
+            let response = [];
+
+            pattern.output.forEach((word) => {
+              if (Math.random() < 0.7) {
+                response.push(word);
+              } else {
+                if (Math.random() < 0.5 && inputWords.length > 0) {
+                  response.push(
+                    inputWords[Math.floor(Math.random() * inputWords.length)]
+                  );
+                } else {
+                  response.push(generateWord());
+                }
+              }
+            });
+
+            mainResponse = response.join(" ");
+            confidence = bestMatch.similarity;
+          }
+        }
+
+        if (!mainResponse) {
+          let sentence1 = "";
+          let sentence2 = "";
+
+          for (let i = 0; i < Math.floor(Math.random() * 3) + 2; i++) {
+            sentence1 += generateWord() + " ";
+          }
+
+          for (let i = 0; i < Math.floor(Math.random() * 3) + 2; i++) {
+            sentence2 += generateWord() + " ";
+          }
+
+          sentence1 = sentence1.trim();
+          sentence2 = sentence2.trim();
+
+          mainResponse =
+            sentence1.charAt(0).toUpperCase() +
+            sentence1.slice(1) +
+            ". " +
+            sentence2.charAt(0).toUpperCase() +
+            sentence2.slice(1) +
+            ["!", "?", "."][Math.floor(Math.random() * 3)];
+
+          confidence = Math.random() * 0.5 + 0.5;
+        }
+
+        for (let i = 0; i < 3; i++) {
+          let altResponse = "";
+          if (trainedPatterns.length > 0 && Math.random() < 0.7) {
+            const randomPattern =
+              trainedPatterns[
+                Math.floor(Math.random() * trainedPatterns.length)
+              ];
+            altResponse = randomPattern.output.join(" ");
+          } else {
+            let sentence1 = "",
+              sentence2 = "";
+            for (let i = 0; i < Math.floor(Math.random() * 3) + 2; i++) {
+              sentence1 += generateWord() + " ";
+            }
+            for (let i = 0; i < Math.floor(Math.random() * 3) + 2; i++) {
+              sentence2 += generateWord() + " ";
+            }
+
+            sentence1 = sentence1.trim();
+            sentence2 = sentence2.trim();
+
+            altResponse =
+              sentence1.charAt(0).toUpperCase() +
+              sentence1.slice(1) +
+              ". " +
+              sentence2.charAt(0).toUpperCase() +
+              sentence2.slice(1) +
+              ["!", "?", "."][Math.floor(Math.random() * 3)];
+          }
+
+          alternatives.push({
+            response: altResponse,
+            confidence: Math.random() * 0.5 + 0.3,
+          });
+        }
+
+        const progress = document.getElementById("trainingProgress");
+        progress.innerHTML += `<br>Alternative responses:<br>`;
+        alternatives.forEach((alt, idx) => {
+          progress.innerHTML += `${idx + 1}. ${alt.response} (${(
+            alt.confidence * 100
+          ).toFixed(2)}% confidence)<br>`;
+        });
+
+        return mainResponse;
+      }
+
+      function compareStrings(str1, str2) {
+        let matches = 0;
+        const words1 = str1.split(" ");
+        const words2 = str2.split(" ");
+
+        words1.forEach((w1) => {
+          if (words2.some((w2) => w2.includes(w1) || w1.includes(w2)))
+            matches++;
+        });
+
+        return matches / Math.max(words1.length, words2.length);
+      }
+
+      function generateStructuredResponse(pattern) {
+        const words = Array.from(aiMemory.words.keys()).filter(
+          (w) => w.length > 2
+        );
+        const patterns = Array.from(aiMemory.patterns.keys());
+        let sentence1 = "",
+          sentence2 = "";
+
+        const usedWords = new Set();
+
+        function getUnusedWord() {
+          const availableWords = words.filter((w) => !usedWords.has(w));
+          if (availableWords.length === 0)
+            return words[Math.floor(Math.random() * words.length)];
+          const word =
+            availableWords[Math.floor(Math.random() * availableWords.length)];
+          usedWords.add(word);
+          return word;
+        }
+
+        while (!isValidSentence(sentence1)) {
+          const wordCount = Math.floor(Math.random() * 4) + 2;
+          let sentenceWords = [];
+          for (let i = 0; i < wordCount; i++) {
+            sentenceWords.push(getUnusedWord() || "universe");
+          }
+          sentence1 = sentenceWords.join(" ");
+        }
+
+        while (!isValidSentence(sentence2)) {
+          const wordCount = Math.floor(Math.random() * 4) + 2;
+          let sentenceWords = [];
+          for (let i = 0; i < wordCount; i++) {
+            sentenceWords.push(getUnusedWord() || "reality");
+          }
+          sentence2 = sentenceWords.join(" ");
+        }
+
+        return (
+          sentence1.charAt(0).toUpperCase() +
+          sentence1.slice(1) +
+          ". " +
+          sentence2.charAt(0).toUpperCase() +
+          sentence2.slice(1) +
+          ["!", "?", "."][Math.floor(Math.random() * 3)]
+        );
+      }
+
+      function isValidSentence(sentence) {
+        if (!sentence) return false;
+        const words = sentence.split(" ");
+        return words.length >= 2 && words.every((w) => w.length >= 2);
+      }
+
+      async function evaluateWithAI(response, expectedResponse, input) {
+        try {
+          const safeResponse = String(response || "");
+          const safeExpectedResponse = String(expectedResponse || "");
+
+          const lengthPenalty = evaluateResponseLength(
+            safeResponse,
+            safeExpectedResponse
+          );
+          let score = 100;
+          let correctLetters = 0;
+
+          const words = safeResponse.toLowerCase().split(" ");
+          const uniqueWords = new Set(words);
+          const diversityBonus = (uniqueWords.size / words.length) * 15;
+
+          for (
+            let i = 0;
+            i < Math.min(safeResponse.length, safeExpectedResponse.length);
+            i++
+          ) {
+            if (safeResponse[i] !== safeExpectedResponse[i]) {
+              score -= 100 / safeExpectedResponse.length;
+            } else {
+              correctLetters++;
+            }
+          }
+
+          score += lengthPenalty;
+          score += diversityBonus;
+
+          const normalizedScore = Math.max(0, Math.min(100, score)) / 100;
+
+          let feedback = `Matched ${correctLetters} letters correctly. Length penalty: ${lengthPenalty}%`;
+          if (uniqueWords.size < words.length) {
+            feedback += `. Word repetition detected - try using more diverse vocabulary!`;
+          } else {
+            feedback += `. Good word diversity! (+${diversityBonus.toFixed(
+              2
+            )}% bonus)`;
+          }
+
+          return {
+            score: normalizedScore,
+            levelScore: normalizedScore,
+            feedback: feedback,
+            needsRetraining: uniqueWords.size < words.length,
+          };
+        } catch (error) {
+          console.error("Error in evaluation:", error);
+          return {
+            score: 0,
+            levelScore: 0,
+            feedback: "Error evaluating response",
+            needsRetraining: true,
+          };
+        }
+      }
+
+      function evaluateResponseLength(response, expected) {
+        const lengthDiff = Math.abs(response.length - expected.length);
+        return Math.max(-40, -lengthDiff * 2);
+      }
+
+      async function getTrainingGuidance() {
+        return {
+          recommendation: "Continue training with current settings",
+          focusAreas: ["basic pattern recognition"],
+        };
+      }
+
+      async function startTraining() {
+        if (!collectTrainingData()) {
+          alert("Please add at least one dataset!");
+          return;
+        }
+
+        const progress = document.getElementById("trainingProgress");
+        progress.innerHTML = "<h3>Training Progress:</h3>";
+
+        let levelScores = new Array(10).fill(0);
+        const roundsPerLevel = parseInt(
+          document.getElementById("roundsPerLevel").value
+        );
+
+        // Filter out already trained datasets
+        const newTrainingData = trainingData.filter((data) => {
+          const key = data.human + "|" + data.robot;
+          if (trainedDatasets.has(key)) {
+            return false;
+          }
+          trainedDatasets.add(key);
+          return true;
+        });
+
+        if (newTrainingData.length === 0) {
+          progress.innerHTML +=
+            '<br><span style="color: #ff0">No new training data available. Add new datasets to continue training.</span><br>';
+          return;
+        }
+
+        try {
+          while (currentLevel <= 10) {
+            document.getElementById(
+              "levelIndicator"
+            ).textContent = `Level ${currentLevel}: ${LEVELS[currentLevel]}`;
+            progress.innerHTML += `<br><strong>Level ${currentLevel}: ${LEVELS[currentLevel]}</strong><br>`;
+
+            const guidance = await getTrainingGuidance();
+            if (guidance && guidance.recommendation) {
+              progress.innerHTML += `<br>AI Trainer Guidance: ${guidance.recommendation}<br>`;
+              progress.innerHTML += `Focus Areas: ${guidance.focusAreas.join(
+                ", "
+              )}<br>`;
+            }
+
+            let totalLevelScore = 0;
+            let roundsCompleted = 0;
+
+            for (let round = 1; round <= roundsPerLevel; round++) {
+              let roundScore = 0;
+              let datasetCount = 0;
+
+              for (let dataset of newTrainingData) {
+                if (!dataset || !dataset.human || !dataset.robot) continue;
+                datasetCount++;
+
+                let response = generateResponse(dataset.human);
+                const evaluation = await evaluateWithAI(
+                  response,
+                  dataset.robot,
+                  dataset.human
+                );
+
+                roundScore += evaluation.levelScore;
+                progress.innerHTML += `Round ${round} Training: ${(
+                  evaluation.score * 100
+                ).toFixed(2)}% accuracy<br>`;
+                progress.innerHTML += `Level Score: ${(
+                  evaluation.levelScore * 100
+                ).toFixed(2)}%<br>`;
+                progress.innerHTML += `Feedback: ${evaluation.feedback}<br>`;
+
+                updateScore(evaluation.score * 10);
+                updateMemoryDisplay();
+
+                progress.scrollTop = progress.scrollHeight;
+                await new Promise((resolve) => setTimeout(resolve, 100));
+              }
+
+              roundScore = roundScore / (datasetCount || 1);
+              totalLevelScore += roundScore;
+              roundsCompleted++;
+
+              document.getElementById("progressFill").style.width = `${
+                (((currentLevel - 1) * roundsPerLevel + round) /
+                  (10 * roundsPerLevel)) *
+                100
+              }%`;
+            }
+
+            const averageLevelScore = totalLevelScore / roundsCompleted;
+            levelScores[currentLevel - 1] = averageLevelScore;
+
+            if (averageLevelScore >= 0.15) {
+              progress.innerHTML += `<span style="color: #0f0">Level ${currentLevel} completed with score: ${(
+                averageLevelScore * 100
+              ).toFixed(2)}%</span><br>`;
+              currentLevel++;
+            } else {
+              progress.innerHTML += `<span style="color: #ff0">Level score: ${(
+                averageLevelScore * 100
+              ).toFixed(2)}%. Continuing training...</span><br>`;
+            }
+          }
+        } catch (error) {
+          console.error("Training error:", error);
+          progress.innerHTML += `<span style="color: #f00">Training error occurred: ${error.message}</span><br>`;
+        }
+
+        document.getElementById("chatInterface").style.display = "block";
+      }
+
+      function collectTrainingData() {
+        trainingData = [];
+        trainedPatterns = [];
+        document.querySelectorAll(".dataset").forEach((dataset) => {
+          const id = dataset.id.split("-")[1];
+          const human = document.getElementById(`human-${id}`).value;
+          const robot = document.getElementById(`robot-${id}`).value;
+          if (human && robot) {
+            trainingData.push({ human, robot });
+            trainedPatterns.push({
+              input: human.toLowerCase().split(" "),
+              output: robot.toLowerCase().split(" "),
+            });
+          }
+        });
+        return trainingData.length > 0;
+      }
+
+      async function sendMessage() {
+        const input = document.getElementById("userInput").value;
+        if (input.trim()) {
+          const response = generateResponse(input);
+
+          document.getElementById(
+            "aiResponse"
+          ).innerHTML += `<p><strong>You:</strong> ${input}<br><strong>AU:</strong> ${response}</p>`;
+
+          document.getElementById("userInput").value = "";
+        }
+      }
+
+      document
+        .getElementById("userInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+
+      document
+        .getElementById("roundsPerLevel")
+        .addEventListener("input", function () {
+          document.getElementById("roundsValue").textContent = this.value;
+        });
+
+      // Add initial dataset
+      addDataset();
+    </script>
+  </body>
+</html>

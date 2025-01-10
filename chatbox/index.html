@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TezienAu</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="background">
+  
+    <div class="form-card" id="username-page">
+        
+        <div class="form-title">Welcome 👋</div>
+       <h3 class="text-animation"> <span></span></h3>
+        <div class="form-subtitle">Select your username to get started</div>
+        <div class="auth">
+            <div class="auth-label">Username</div>
+            <input class="auth-input" id="username" placeholder="Enter your username"/>
+            <button class="auth-button" id="auth-button" disabled>Authenticate</button>
+        </div>
+    </div>
+
+    <div class="upload-page" id="upload-page" style="display: none;">
+        <div class="circle" id="upload-circle">
+            <i class="fas fa-camera"></i>
+        </div>
+        <div class="upload-title">Click the icon to upload your profile image</div>
+        <input type="file" class="upload-input" id="profile-img-input" accept="image/*" style="display:none;">
+        <button class="next-button" id="next-button" >Next</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

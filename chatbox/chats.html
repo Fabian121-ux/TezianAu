@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Page</title>
+    <style>
+        /* Chatbot Page Styling */
+                /* Chatbot Page Styling */
+                .chatbot-page {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 30px 50px 15px rgb(255, 255, 255);
+            position: relative;
+            height: 80vh;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-y: auto;
+        }
+
+        /* Chat Header */
+        .chat {
+            border-bottom: 1px solid #f3f1f1;
+            position: fixed; /* Fix header at the top */
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Chat Area */
+        .chat-area {
+            flex-grow: 1;
+            padding: 20px;
+            margin-top: 60px; /* Adjust for fixed header */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            color: #000000;
+            background: rgb(0, 0, 0);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+        }
+
+        /* Fixed Emoji with Z-Index */
+        .emoji-center {
+            position: fixed; /* Fix emoji */
+            bottom: 50%;
+            left: 50%;
+            transform: translate(-100%, 50%);
+            font-size: 100px;
+            animation: rotateAndScale 3s infinite ease-in-out, pulseGlow 5s infinite ease-in-out;
+            z-index: -1; /* Push emoji behind content */
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .emoji-center:hover {
+            transform: perspective(800px) rotateX(360deg) rotateY(360deg) scale(1.2);
+        }
+
+        /* Animation */
+        @keyframes rotateAndScale {
+            0% {
+                transform: perspective(800px) rotateX(0deg) rotateY(0deg) scale(1);
+            }
+            25% {
+                transform: perspective(800px) rotateX(90deg) rotateY(0deg) scale(1.1);
+            }
+            50% {
+                transform: perspective(800px) rotateX(180deg) rotateY(90deg) scale(1);
+            }
+            75% {
+                transform: perspective(800px) rotateX(270deg) rotateY(180deg) scale(1.1);
+            }
+            100% {
+                transform: perspective(800px) rotateX(360deg) rotateY(360deg) scale(1);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                text-shadow: 0 0 20px #ffdd00, 0 0 40px #ff9900, 0 0 60px #ffdd00;
+            }
+            50% {
+                text-shadow: 0 0 30px #ffffff, 0 0 50px #ffdd00, 0 0 70px #ff9900;
+            }
+        }
+
+        /* Message Input Fixed */
+
+        .message-input textarea {
+            position: relative;
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            background-color: #444;
+            color: white;
+            outline: none;
+            white-space: pre-wrap;
+            resize: none;
+            overflow: hidden;
+        }
+
+        .message-input button {
+            background-color: #007bff;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .message-input button:hover {
+            background-color: #0056b3;
+        }
+        .chat-header img {
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        /* Animation */
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+         Optional Scrollbar Styling 
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #261d59;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #82369e;
+        }
+
+        .chat-send-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+
+        /* Solar System Moving Background */
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #020024, #090979, #00d4ff);
+    transition: background-color 0.5s ease;
+}
+
+.solar-system {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+/* Sun */
+.planet.sun {
+    position: absolute;
+    top: 10%;
+    left: 45%;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, #ffdd00, #ff9900);
+    border-radius: 50%;
+    box-shadow: 0 0 50px 20px rgba(255, 223, 0, 0.5);
+    animation: spin 10s linear infinite;
+}
+
+/* Earth */
+.planet.earth {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, #00d4ff, #0044ff);
+    border-radius: 50%;
+    animation: orbit 20s linear infinite;
+}
+
+/* Moon */
+.planet.moon {
+    position: absolute;
+    top: 60%;
+    left: 30%;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #cccccc, #666666);
+    border-radius: 50%;
+    animation: orbit-moon 5s linear infinite;
+}
+
+/* Chatbot Page Styling */
+.chatbot-page {
+    display: flex;
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: transparent;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    height: 80vh;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.chat-header .theme-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.chat-area {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    color: #bbb;
+}
+
+.chat-area img {
+    width: 150px;
+    margin-bottom: 10px;
+}
+
+/* Message Input */
+.message-input {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #222;
+    border-radius: 20px;
+    margin-top: 20px;
+    animation: slideUp 0.3s ease-out;
+}
+
+.message-input textarea {
+    flex-grow: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #444;
+    color: white;
+    outline: none;
+    white-space: pre-wrap;
+    resize: none;
+    overflow: hidden;
+}
+
+.message-input button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.message-input button:hover {
+    background-color: #0056b3;
+}
+
+/* Animations */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes orbit {
+    from {
+        transform: rotate(0deg) translateX(200px) rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg) translateX(200px) rotate(-360deg);
+    }
+}
+
+@keyframes orbit-moon {
+    from {
+        transform: rotate(0deg) translateX(50px) rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg) translateX(50px) rotate(-360deg);
+    }
+}
+
+
+.chat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+
+.chat-option {
+  padding: 15px;
+  background: linear-gradient(145deg, #282842, #1c1c2e);
+  color: #ffffff;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.chat-option:hover {
+  transform: scale(1.05);
+  background: linear-gradient(145deg, #3a3a55, #2a2a3d);
+}
+
+/* Typing effect */
+.typing-effect {
+  margin-top: 20px;
+  font-size: 1.2em;
+  color: #00c6ff;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid #ff6f61;
+  animation: typing 2s steps(20, end), blink 0.6s infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Solar System Background -->
+    <div class="solar-system">
+        <div class="planet sun"></div>
+        <div class="planet earth"></div>
+        <div class="planet moon"></div>
+    </div>
+
+    <div class="chatbot-page" id="chatbot-page">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="user-info">
+                <img id="user-profile-img" src="" alt="Profile Image">
+                <span id="user-name" style="color: #26ff00;">TezienAu</span>
+            </div>
+            <button class="theme-toggle">🌙</button>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <div class="chat-content">
+                <!-- Initial chat options -->
+
+                <div class="chat-option" onclick="handleResponse('what is tezien')">what is tezien</div>
+                <div class="chat-option" onclick="handleResponse('tezien objective')">tezien objective</div>
+                <div class="chat-option" onclick="handleResponse('ai in the future')">ai in the future</div>
+                <div class="chat-option" onclick="handleResponse('what is ai')">What is AI?</div>
+                <div class="chat-option" onclick="handleResponse('invention of ai')">Invention of AI</div>
+                <div class="chat-option" onclick="handleResponse('ai categories')">AI Categories</div>
+                <div class="chat-option" onclick="handleResponse('machine learning')">Machine Learning</div>
+                <div class="chat-option" onclick="handleResponse('deep learning')">Deep Learning</div>
+                <div class="chat-option" onclick="handleResponse('natural language')">natural Learning</div>
+                <div class="chat-option" onclick="handleResponse('computer vision')">computer vision</div>
+                <div class="chat-option" onclick="handleResponse('ai ethics')">ai ethics</div>
+                <div class="chat-option" onclick="handleResponse('future of ai')">future of ai</div>
+                <div class="chat-option" onclick="handleResponse('ai in healthcare')">ai in healthcare</div>
+                <div class="chat-option" onclick="handleResponse('who created ai')">who created ai</div>
+                <div class="chat-option" onclick="handleResponse('what is a neural network')">what is a neural network</div>
+                <div class="chat-option" onclick="handleResponse('how does ai learn')">how does ai learn</div>
+                <div class="chat-option" onclick="handleResponse('ai in daily life')">ai in daily life</div>
+                <div class="chat-option" onclick="handleResponse('advantages of ai')">advantages of ai</div>
+                <div class="chat-option" onclick="handleResponse('disadvantages of ai')">disadvantages of ai</div>
+                <div class="chat-option" onclick="handleResponse('is ai dangerous')">is ai dangerous</div>
+                <div class="chat-option" onclick="handleResponse('ai in gaming')">ai in gaming</div>
+              </div>
+            <!-- Emoji Center -->
+            <div class="emoji-center">✌️</div>
+            <p style="text-align: center; color: #888;">Chat With TezienAu <br> by clicking on any or the option above of by inputing them on the from input</p>
+        </div>
+
+
+        <div class="box">
+             <!-- Message Input -->
+     <div class="message-input">
+        <textarea placeholder="Write a message..." rows="1"></textarea>
+        <button>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M2 21l21-9-21-9v7l15 2-15 2v7z"></path>
+            </svg>
+        </button>
+    </div>
+        </div>
+       
+    </div>
+
+    
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const themeToggle = document.querySelector(".theme-toggle");
+    const body = document.body;
+
+    themeToggle.addEventListener("click", () => {
+        if (body.style.background === "black") {
+            body.style.background = "linear-gradient(to bottom, #020024, #090979, #00d4ff)";
+            themeToggle.textContent = "🌙";
+        } else {
+            body.style.background = "black";
+            themeToggle.textContent = "☀️";
+        }
+    });
+});
+
+// Keywords and responses
+const keywords = {
+  "what is ai": "AI, or Artificial Intelligence, refers to systems designed to mimic human intelligence.",
+  "invention of ai": "The invention of AI is traced back to the 1950s, with pioneers like Alan Turing.",
+  "ai categories": "AI is commonly categorized into Narrow AI, General AI, and Superintelligent AI.",
+  "machine learning": "Machine Learning is a subset of AI that enables systems to learn from data.",
+  "deep learning": "Deep Learning is a type of Machine Learning using neural networks with many layers.",
+  "natural language processing": "NLP enables machines to understand and respond to human language.",
+  "computer vision": "Computer Vision allows computers to interpret and make decisions based on visual data.",
+  "ai ethics": "AI ethics involve the moral implications and responsibilities of AI development.",
+  "future of ai": "The future of AI holds potential for significant advancements, with ethical considerations.",
+  "ai in healthcare": "AI in healthcare enhances diagnostics, personalized treatments, and patient care.",
+  "who created ai": "AI has many contributors, but Alan Turing is often called the 'Father of AI.'",
+  "what is a neural network": "Neural networks are algorithms modeled after the human brain's structure.",
+  "how does ai learn": "AI learns through training on vast datasets, refining its algorithms over time.",
+  "ai in daily life": "AI is all around us—in virtual assistants, recommendation systems, and more.",
+  "advantages of ai": "AI offers automation, enhanced decision-making, and efficiency improvements.",
+  "disadvantages of ai": "AI can lead to job displacement, ethical issues, and privacy concerns.",
+  "is ai dangerous": "AI poses risks if not controlled but also offers significant benefits.",
+  "ai in gaming": "AI in gaming provides realistic interactions and adaptive gameplay.",
+  "what is tezien": "TezienAu is an innovative prototype designed to uniquely manipulate, inspect, and view the work of Artificial Intelligence (AI) algorithms.",
+  "tezien objective": "Tezien's primary objective is to provide a comprehensive platform for AI analysis.",
+  "ai in the future": "AI is expected to integrate more seamlessly into our daily lives."
+};
+
+// Handle response dynamically
+function handleResponse(keyword) {
+  const chatContent = document.querySelector('.chat-content');
+  
+  // Clear existing content and add typing animation
+  chatContent.innerHTML = `<div class="typing-effect">Loading response...</div>`;
+  
+  setTimeout(() => {
+    // Display the response and next options
+    const response = keywords[keyword] || "Sorry, I don't understand that question.";
+    chatContent.innerHTML = `
+       <div class="chat-response">${response}</div>
+    <div class="chat-option" onclick="handleResponse('what is tezien')">what is tezien</div>
+    <div class="chat-option" onclick="handleResponse('tezien objective')">it's objective</div>
+    <div class="chat-option" onclick="handleResponse('ai in the future')">ai in the future</div>
+    <div class="chat-option" onclick="handleResponse('what is ai')">What is AI?</div>
+    <div class="chat-option" onclick="handleResponse('invention of ai')">Invention of AI</div>
+    <div class="chat-option" onclick="handleResponse('ai categories')">AI Categories</div>
+    <div class="chat-option" onclick="handleResponse('machine learning')">Machine Learning</div>
+    <div class="chat-option" onclick="handleResponse('deep learning')">Deep Learning</div>
+    <div class="chat-option" onclick="handleResponse('natural language')">natural Learning</div>
+    <div class="chat-option" onclick="handleResponse('computer vision')">computer vision</div>
+    <div class="chat-option" onclick="handleResponse('ai ethics')">ai ethics</div>
+    <div class="chat-option" onclick="handleResponse('future of ai')">future of ai</div>
+    <div class="chat-option" onclick="handleResponse('ai in healthcare')">ai in healthcare</div>
+    <div class="chat-option" onclick="handleResponse('who created ai')">who created ai</div>
+    <div class="chat-option" onclick="handleResponse('what is a neural network')">what is a neural network</div>
+    <div class="chat-option" onclick="handleResponse('how does ai learn')">how does ai learn</div>
+    <div class="chat-option" onclick="handleResponse('ai in daily life')">ai in daily life</div>
+    <div class="chat-option" onclick="handleResponse('advantages of ai')">advantages of ai</div>
+    <div class="chat-option" onclick="handleResponse('disadvantages of ai')">disadvantages of ai</div>
+    <div class="chat-option" onclick="handleResponse('is ai dangerous')">is ai dangerous</div>
+    <div class="chat-option" onclick="handleResponse('ai in gaming')">ai in gaming</div>
+    `;
+  }, 3000); // 3-second delay to simulate typing effect
+}
+
+
+</script>
+<script src="script.js"></script>
+<script src="response.js"></script>
+</body>
+</html>
