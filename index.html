@@ -697,7 +697,7 @@ document.addEventListener('DOMContentLoaded', () => {
       messageCount++;
       setTimeout(() => {
         if (messageCount >= 3) {
-          addMessage("I'm really enjoying our conversation! Would you like to continue in our main chat room? " + "Click here to join: <a href='/chatbox/index.html' target='_blank'>TezienAu Chat Room</a>", true);
+          addMessage("I'm really enjoying our conversation! Would you like to continue in our main chat room? " + "Click here to join: <a href='chatbox/index.html' target='_blank'>TezienAu Chat Room</a>", true);
         } else {
           const response = CHAT_RESPONSES[Math.floor(Math.random() * CHAT_RESPONSES.length)];
           addMessage(response, true);
