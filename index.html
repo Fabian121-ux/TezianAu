@@ -105,7 +105,9 @@ nav {
   text-align: center;
   max-width: 600px;
   opacity: 0.8;
+  margin-bottom: 2rem;
 }
+    
 
 section {
   min-height: 100vh;
@@ -119,6 +121,7 @@ section h2 {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
 
 .ball-container {
   position: fixed;
@@ -303,49 +306,37 @@ section h2 {
   }
 }
 
-.card {
-  background: rgba(21, 21, 21, 0.7);
-  border-radius: 15px;
-  padding: 2rem;
-  margin: 1rem 0;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(110, 68, 255, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  min-height: 250px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
+.features {
+    padding: 5rem 0;
+  }
 
-.card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 10px 30px rgba(110, 68, 255, 0.2);
-}
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
 
-.card-icon {
-  font-size: 2.8rem;
-  margin-bottom: 1.2rem;
-  background: linear-gradient(45deg, var(--primary), #ff44e3);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+  .feature-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s;
+  }
 
-.card h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: var(--text);
-}
+  .feature-card:hover {
+    transform: translateY(-10px);
+  }
 
-.card p {
-  line-height: 1.6;
-  opacity: 0.9;
-}
+  .feature-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+  }
 
-.solutions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+.feature-title{
+  columns: #000;
 }
 
 .footer {
@@ -499,111 +490,83 @@ section h2 {
     <p>Pioneering Artificial Understanding - Where AI transcends traditional boundaries to truly comprehend human context and meaning</p>
   </div>
 
-  <section id="solutions">
-    <h2>Solutions</h2>
-    <div class="solutions-grid">
-      <div class="card">
-        <div class="card-icon">&#x1f9e0;</div>
-        <h3>Context-Aware Understanding</h3>
-        <p>Our advanced natural language processing technology truly understands contextual nuances and subtle meanings in human communication, going beyond simple pattern matching.</p>
+
+<section class="name-explanation">
+  <div class="hero">
+    <h2>Why TezienAu?</h2>
+    <p>
+      TezienAu represents the pinnacle of Artificial Understanding (AU) -
+      going beyond traditional AI to truly comprehend and adapt to human
+      needs. Our technology doesn't just process data; it understands
+      context, emotions, and intentions.
+    </p>
+  </div>
+</section>
+
+<section class="features">
+  <div class="hero">
+    <h2>Advanced Capabilities</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z"
+          />
+        </svg>
+        <h3 style="
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(45deg, var(--primary), #ff44e3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;">Contextual Understanding</h3>
+        <p>
+          Our AU technology processes information within its full context,
+          enabling more accurate and meaningful insights.
+        </p>
+      </div>
+<!--
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M21,11C21,16.55 17.16,21.74 12,23C6.84,21.74 3,16.55 3,11V5L12,1L21,5V11M12,21C15.75,20 19,15.54 19,11.22V6.3L12,3.18L5,6.3V11.22C5,15.54 8.25,20 12,21Z"
+          />
+        </svg>
+        <h3 style="
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(45deg, var(--primary), #ff44e3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;">Advanced Security</h3>
+        <p>
+          Enterprise-grade security with cutting-edge encryption and privacy
+          protection mechanisms.
+        </p>
+      </div>
+ -->
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"
+          />
+        </svg>
+        <h3 style="
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(45deg, var(--primary), #ff44e3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;">Continuous Learning</h3>
+        <p>
+          Our systems evolve and improve through continuous learning and
+          adaptation.
+        </p>
       </div>
       
-      <div class="card">
-        <div class="card-icon">&#x1f3af;</div>
-        <h3>Semantic Analysis</h3>
-        <p>TezienAu employs deep semantic comprehension to grasp meaning beyond surface-level language processing, enabling more natural and intuitive interactions.</p>
-      </div>
-      
-      <div class="card">
-        <div class="card-icon">&#x2764;&#xfe0f;</div>
-        <h3>Emotional Intelligence</h3>
-        <p>Our system features sophisticated recognition and response to emotional undertones, creating more empathetic and human-like interactions.</p>
-      </div>
-      
-      <div class="card">
-        <div class="card-icon">&#x1f4da;</div>
-        <h3>Adaptive Learning</h3>
-        <p>TezienAu continuously evolves its understanding through real-time interactions, becoming more refined and accurate with each engagement.</p>
-      </div>
-      
-      <div class="card">
-        <div class="card-icon">&#x1f9f1;</div>
-        <h3>Multi-Modal Understanding</h3>
-        <p>Process and comprehend multiple forms of input including text, speech, and visual data for holistic understanding.</p>
-      </div>
-      
-      <div class="card">
-        <div class="card-icon">&#x1f4c8;</div>
-        <h3>Predictive Analytics</h3>
-        <p>Leverage deep understanding to provide actionable insights and predict future trends based on comprehensive data analysis.</p>
-      </div>
     </div>
-  </section>
-
-  <section id="about">
-    <h2>About</h2>
-    <div class="solutions-grid">
-      <div class="card">
-        <div class="card-icon">&#x1f31f;</div>
-        <h3>The Future of AI Understanding</h3>
-        <p>TezienAu represents the next evolution in artificial intelligence - Artificial Understanding. Unlike traditional AI systems that rely on pattern matching and predetermined responses, our technology develops genuine comprehension of human communication.</p>
-      </div>
-      
-      <div class="card">
-        <div class="card-icon">&#x1f4a1;</div>
-        <h3>Our Vision</h3>
-        <p>We envision a future where AI systems don&apos;t just process data, but truly comprehend human intent, emotion, and context. TezienAu is leading this transformation through breakthrough developments in semantic understanding.</p>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">&#x1f680;</div>
-        <h3>Innovation Journey</h3>
-        <p>Our journey began with a simple question: What if AI could truly understand humans? Today, we&apos;re pioneering technologies that bridge the gap between artificial intelligence and authentic understanding.</p>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">&#x1f3ed;</div>
-        <h3>Technology Foundation</h3>
-        <p>Built on cutting-edge neural architectures and semantic processing systems, TezienAu combines multiple AI disciplines to achieve genuine comprehension of human communication.</p>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">&#x1f4cb;</div>
-        <h3>Our Team</h3>
-        <p>Led by experts in AI, linguistics, and cognitive science, our diverse team brings together decades of experience in pushing the boundaries of machine intelligence.</p>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">&#x1f3c6;</div>
-        <h3>Our Achievements</h3>
-        <p>Recognized as pioneers in the field of Artificial Understanding, with breakthrough developments in semantic processing and contextual comprehension.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact">
-    <h2>Contact</h2>
-    <div class="solutions-grid">
-      <div class="contact-form card">
-        <h3>Contact Us</h3>
-        <form id="contactForm">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" required>
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" required>
-          </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea id="message" required></textarea>
-          </div>
-          <button type="submit" class="submit-btn">Send Message</button>
-        </form>
-      </div>
-    </div>
-  </section>
+  </div>
+</section>
 
   <div class="ball-container">
     <div class="ball"></div>
