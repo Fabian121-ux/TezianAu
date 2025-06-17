@@ -2,10 +2,6 @@
   "version": 2,
   "builds": [
     {
-      "src": "build.js",
-      "use": "@vercel/node"
-    },
-    {
       "src": "wsgi.py",
       "use": "@vercel/python"
     }
@@ -13,31 +9,14 @@
   "routes": [
     {
       "src": "/static/(.*)",
-      "dest": "/public/assets/$1"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/wsgi.py"
-    },
-    {
-      "src": "/auth/(.*)",
-      "dest": "/wsgi.py"
-    },
-    {
-      "src": "/library/(.*)",
-      "dest": "/wsgi.py"
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "/wsgi.py"
+      "dest": "/public/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/public/index.html"
+      "dest": "/wsgi.py"
     }
   ],
   "env": {
     "FLASK_ENV": "production"
-  },
-  "outputDirectory": "public"
+  }
 }
