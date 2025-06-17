@@ -1,0 +1,14 @@
+Flask==2.3.3
+Flask-SocketIO==5.3.6
+Flask-Login==0.6.3
+Flask-WTF==1.1.1
+WTForms==3.0.1
+Werkzeug==2.3.7
+supabase==1.0.4
+python-dotenv==1.0.0
+Pillow==10.0.1
+python-socketio==5.9.0
+eventlet==0.33.3
+gunicorn==21.2.0
+psycopg2-binary==2.9.7
+requests==2.31.0

@@ -1,0 +1,7 @@
+# Redirect all routes to Flask app
+/api/* /api/:splat 200
+/auth/* /auth/:splat 200
+/library/* /library/:splat 200
+/admin/* /admin/:splat 200
+/static/* /static/:splat 200
+/* /index.html 200
